@@ -69,6 +69,12 @@
   Output: Next, let's learn how to fit a Poisson regression by using the function glm() in R!
 
 - Class: cmd_question
+  Output: First change the working directory by typing setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
+  CorrectAnswer: setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
+  AnswerTests: omnitest(correctExpr='setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))')
+  Hint: setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
+
+- Class: cmd_question
   Output: First we load the data named "Data.RData" which is in the current working directory. Do you know the command for loading it? 
   CorrectAnswer: load("Data.RData")
   AnswerTests: omnitest(correctExpr='load("Data.RData")')

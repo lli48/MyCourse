@@ -8,5 +8,3 @@
             lesson, file_name)
 }
 
-wd = paste0(system.file(package="swirl"), "/MyCourse/GLM")
-setwd(wd)
