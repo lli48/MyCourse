@@ -1,0 +1,186 @@
+- Class: meta
+  Course: MyCourse
+  Lesson: GLM
+  Author: Lu Li
+  Type: Standard
+  Organization: Johns Hopkins Bloomberg School of Public Health Department of Biostatistics
+  Version: 2.2.21
+  
+- Class: text
+  Output: Welcome to the lesson in Generalized Linear Model, with a specific focus on Poisson Regresson. This lesson is aimed to help you learn some background knowledge about Poisson Regression, and also provides an example on how to fit a Poisson Regression in R.
+
+- Class: text
+  Output: Let's first recall the assumption of Ordinary Linear Regression.
+
+- Class: mult_question
+  Output: What's the assumption on the error distribution of response variables in Ordinary Linear Regression?
+  AnswerChoices: Normal Distribution;Poisson Distribution;Uniform Distribution
+  CorrectAnswer: Normal Distribution
+  AnswerTests: omnitest(correctVal= 'Normal Distribution')
+  Hint: It's Normal. 
+
+- Class: text
+  Output: The Generalized Linear Model (GLM) is a flexible generalization of ordinary linear regression that allows for response variables that have error distribution models other than a normal distribution. The GLM generalizes linear regression by allowing the linear model to be related to the response variable via a link function and by allowing the magnitude of the variance of each measurement to be a function of its predicted value.
+
+- Class: text
+  Output: Now, we will only focus on a special case of GLM, Poisson Regression.
+
+- Class: mult_question
+  Output: What can be the response variables in Poisson Regression?
+  AnswerChoices: Both;Count Data;Rate
+  CorrectAnswer: Both
+  AnswerTests: omnitest(correctVal= 'Both')
+  Hint: It can be both. 
+  
+- Class: text
+  Output: In Poisson regression, Response/outcome variable Y is a count. But we can also have Y/t, the rate (or incidence) as the response variable, where t is an interval representing time, space or some other grouping.
+ 
+- Class: text
+  Output: In terms of Explanatory Variables, they can be both continuous and categorical. 
+
+- Class: text
+  Output: If explanatory variables, X = (X1, X2, … Xk), are continuous or a combination of continuous and categorical variables, convention is to call such a model “Poisson Regression”.
+
+- Class: text
+  Output: If explanatory variables, X = (X1, X2, … Xk), are ALL categorical, then the counts to be modeled are the counts in a contingency table, and the convention is to call such a model log-linear model.
+
+- Class: text
+  Output: If Y/t is the variable of interest then even with all categorical predictors, the regression model will be known as Poisson regression, not a log-linear model.
+  
+- Class: text
+  Output: For example, in using Poisson regression, we can model the number of awards earned by students at one high school. Predictors of the number of awards earned include the type of program in which the student was enrolled (e.g., vocational, general or academic) and the score on their final exam in math.
+
+- Class: text
+  Output: As another example, we can model the expected number of credit cards a person may have, given his/her income. Or we can also deal with the sample rate of possession of credit cards using the same data. 
+
+- Class: figure
+  Output: Now, let's see a brief introduction to Poisson Regression.
+  Figure: intro.R
+  FigureType: new
+
+- Class: mult_question
+  Output: After reading the material carefully, do you know the type of link function for Poisson Regression? 
+  AnswerChoices: log;identity;exponential
+  CorrectAnswer: log
+  AnswerTests: omnitest(correctVal= 'log')
+  Hint: log 
+  
+- Class: text
+  Output: Next, let's learn how to fit a Poisson regression by using the function glm() in R!
+
+- Class: cmd_question
+  Output: First we load the data named "Data.RData" which is in the current working directory. Do you know the command for loading it? 
+  CorrectAnswer: load("Data.RData")
+  AnswerTests: omnitest(correctExpr='load("Data.RData")')
+  Hint: try load("Data.RData")
+
+- Class: cmd_question
+  Output: Do you know the command to look at the first 10 entries of our data "crab"? You will see what covariates we have in this data set. 
+  CorrectAnswer: head(crab, 10)
+  AnswerTests: omnitest(correctExpr='head(crab, 10)')
+  Hint: try head(crab, 10)
+  
+- Class: text
+  Output: This example refers to data from a study of nesting horseshoe crabs (J. Brockmann, Ethology 1996). The study investigated factors that affect whether the female crab had any other males, called satellites, residing near her. Explanatory variables that are thought to affect this included the female crab’s color (C), spine condition (S), weight (Wt), and carapace width (W). The response outcome for each female crab is her number of satellites (Sa). There are 173 females in this study. 
+
+- Class: text
+  Output: Note that in the data, we have already transformed color (C) and spine condition (S) into integer index. By fitting a model, we should first change them into categorical variables. If not, they will be treated as continuous variables. 
+
+- Class: cmd_question
+  Output: Type the command to change the column "C" in the data frame "crab" into categorical variables. 
+  CorrectAnswer: crab$C = as.factor(crab$C)
+  AnswerTests: omnitest(correctExpr='crab$C = as.factor(crab$C)')
+  Hint: try crab$C = as.factor(crab$C)
+
+- Class: cmd_question
+  Output: Do the same thing for column "S". 
+  CorrectAnswer: crab$S = as.factor(crab$S)
+  AnswerTests: omnitest(correctExpr='crab$S = as.factor(crab$S)')
+  Hint: try crab$S = as.factor(crab$S)
+
+- Class: cmd_question
+  Output: Let's first see the help page of glm(). Do you know how to do that? 
+  CorrectAnswer: ?glm
+  AnswerTests: omnitest(correctExpr='?glm')
+  Hint: try ?glm
+
+- Class: text_question
+  Output: After reading the help page, do you know how to set the family option in our case? 
+  CorrectAnswer: family = poisson()
+  AnswerTests: omnitest(correctVal='family = poisson()')
+  Hint: try family = poisson()
+
+- Class: cmd_question
+  Output: Now try fit1=glm(crab$Sa~.,family=poisson(), data = crab) to fit a Poisson Regression model. By using ".", we are regressing on all covariates. 
+  CorrectAnswer: fit1=glm(crab$Sa~.,family=poisson(), data = crab)
+  AnswerTests: omnitest(correctExpr='fit1=glm(crab$Sa~.,family=poisson(), data = crab)')
+  Hint: try fit1=glm(crab$Sa~.,family=poisson(), data = crab)
+
+- Class: cmd_question
+  Output: Typing the command "summary(fit1)", we will see a summary of the fitted model
+  CorrectAnswer: summary(fit1)
+  AnswerTests: omnitest(correctExpr='summary(fit1)')
+  Hint: try summary(fit1)
+
+- Class: text
+  Output: The summary first gives a general description of deviance residuals, with a minimum of -3.0291, a maximum of 4.9449. It also provides the estimate with standard error and corresponding p value for each covariate. The last part is the deviance and degrees of freedom of the model, letting us to check whether the model is a good fit. 
+
+- Class: text
+  Output: Knowing that the residual deviance follows a chi-squared distribution, we can perform the test to see whether the model is a good fit. 
+  
+- Class: cmd_question
+  Output: Given that "fit1$deviance" is the residual deviance of the model, "fit1$df.residual" is the degree of freedom, how to calculate the p-value for this chi-squared test? 
+  CorrectAnswer: 1-pchisq(fit1$deviance, fit1$df.residual)
+  AnswerTests: omnitest(correctExpr='1-pchisq(fit1$deviance, fit1$df.residual)')
+  Hint: try 1-pchisq(fit1$deviance, fit1$df.residual)
+
+- Class: text
+  Output: The p-value is 0, suggesting that our model is not a good fit. By calculating the residual deviance/df=549.5641/165=3.33 which is much bigger than 1, we can also conclude that the model does not fit well. The lack of fit maybe due to missing data, covariates or overdispersion. However, the best we can do right now is to consider overdispersion. 
+  
+- Class: text
+  Output: In GLM, we can set family=quasipoisson() to deal with overdispersion. 
+  
+- Class: cmd_question
+  Output: Please type the command of fitting a new model using quasipoisson. The model is called fit2.
+  CorrectAnswer: fit2=glm(crab$Sa~.,family=quasipoisson(), data = crab)
+  AnswerTests: omnitest(correctExpr='fit2=glm(crab$Sa~.,family=quasipoisson(), data = crab)')
+  Hint: try fit2=glm(crab$Sa~.,family=quasipoisson(), data = crab)
+
+- Class: cmd_question
+  Output: Similarly, we want to request a summary of model fit2. 
+  CorrectAnswer: summary(fit2)
+  AnswerTests: omnitest(correctExpr='summary(fit2)')
+  Hint: try summary(fit2)
+  
+- Class: text
+  Output: The summary shows that all the coefficients are not significant at 0.05 level. We may want to change our model by dropping some covariates. A typical method is to first drop the covariate with largest p-value, which is crab$W in our case. 
+  
+- Class: cmd_question
+  Output: Now, we want to fit a new model without carapace width (W), named fit3. 
+  CorrectAnswer: fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)
+  AnswerTests: omnitest(correctExpr='fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)')
+  Hint: try fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)
+  
+- Class: cmd_question
+  Output: Check the p-values for each covariate in the new model
+  CorrectAnswer: summary(fit3)
+  AnswerTests: omnitest(correctExpr='summary(fit3)')
+  Hint: try summary(fit3)
+  
+- Class: text
+  Output: We can use anova to test whether the dropped covariate is statistically significant. Note that we are using quasipoisson family, it is better to use F test, rather than chi-squared test. 
+
+- Class: cmd_question
+  Output: Doing anova for fit3 and fit2 by using F-test. 
+  CorrectAnswer: anova(fit3, fit2, test = "F")
+  AnswerTests: omnitest(correctExpr='anova(fit3, fit2, test = "F")')
+  Hint: try anova(fit3, fit2, test = "F")
+
+- Class: text
+  Output: The p value from F-test is 0.8516, implying that carapace width (W) is not a main factor for the number of satellites (Sa). 
+  
+- Class: text
+  Output: Using the same technique, we can further refine our model, which will be your exercises.
+
+- Class: text
+  Output: Hope you have learned something from this class. See you next time!

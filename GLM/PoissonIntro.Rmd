@@ -1,0 +1,68 @@
+---
+title: "Introduction to Poisson Regression"
+author: "Lu Li"
+date: "December 16, 2015"
+output: html_document
+---
+Now, we will introduce more on the theoretical side of Poisson Regression. 
+
+### Three components of GLM
+- A probability distribution
+- A linear predictor $\eta = X\beta$
+- A link function g such that E(Y) = $\mu$ = $g^{-1}(\eta)$
+
+In Poisson regression, we usually choose the link function to be $\log$. 
+
+### GLM Model for Counts
+Assume that 
+$$ g(\mu)=\beta_0+\beta_1X_1+\beta_2X_2+…+\beta_kX_k=X^T_i\beta $$
+
+Here, the response Y has a Poisson distribution that is $y_i$ ~ $Poisson(\mu_i)$ for $i=1,...,N$ where the expected count of $y_i$ is E(Y)=$\mu$.
+
+For simplicity, with a single explanatory variable and log link function, we write: $\log(\mu)=\alpha+\beta X.$ This is equivalent to: $\mu=\exp(\alpha+\beta X)=\exp(\alpha)\exp(\beta X)$. 
+
+### GLM Model for Rates
+Assume that 
+$$ g(\mu)=\beta_0+\beta_1X_1+\beta_2X_2+…+\beta_kX_k=X^T_i\beta $$
+
+Here, the response Y has a Poisson distribution, and t is the index of the time or space; more specifically the expected value of rate Y/t, is $E(Y/t)=\mu$ that is $E(Y)=\mu t$. 
+
+With the same log link function, we have $\log(\mu/t)=\alpha+\beta X$, which is equivalent to 
+$$ \log(\mu)−\log(t)=\alpha+\beta X $$
+$$ \log(\mu)=\alpha+\beta X+ \log(t)$$
+
+We call $\log(t)$ an offset term. It is an adjustment term and a group of observations may have the same offset, or each individual may have a different value of t. 
+
+### Parameter Estimation
+We can find the Maximum Likelihood Estimator(MLEs) for $\beta$ by maximizing the log-likelihood. In general, there are no closed-form solutions, so the ML estimates are obtained by using iterative algorithms such as Newton-Raphson (NR), Iteratively re-weighted least squares (IRWLS), etc.
+
+Example: 
+
+Response: $Y_1, Y_2, ..., Y_n$
+
+Explanatory Variable: $X_1, X_2, ..., X_n$
+
+$Y_i|\mu_i$ ~ Poisson($\mu_i$), $\eta_i = \log(\mu_i) = X^T_i \beta$
+
+The log-likelihood can be written as: 
+$l(\mu,y) = \sum_i(y_i\log(\mu_i)-\mu_i)+constant = \sum_i (y_i X^T_i \beta - \exp(X^T_i \beta))+c$
+
+By calculating the first and second derivative of l with respect to $\beta$, we can derive the formula for N-R method: ($W = diag(\mu_i)$)
+
+$\beta_{i+1} = \beta_i + (X^TWX)^{-1}X^T(y-\mu)$
+
+### Model Fit
+
+#### Residual analysis
+- Pearson residual: $(y_i-\mu_i)/\sqrt{\mu_i}$
+- deviance residual: $sgn(y_i-\mu_i)\sqrt{2(y_i\log(y_i/\mu_i)-(y_i-\mu_i))}$
+- etc...
+
+#### Overdispersion: 
+- A Poisson distribution has the same mean and variance
+- Overdispersion means that observed variance is larger than the assumed variance, i.e., Var(Y)=$\phi \mu$ where $\phi$ is a scale parameter
+- We can either adjust for overdispersion or use negative binomial regression instead
+
+### GLM in R
+In R, we can use the function glm() to fit the model. 
+
