@@ -69,16 +69,10 @@
   Output: Next, let's learn how to fit a Poisson regression by using the function glm() in R!
 
 - Class: cmd_question
-  Output: First change the working directory by typing setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
-  CorrectAnswer: setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
-  AnswerTests: omnitest(correctExpr='setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))')
-  Hint: setwd(paste0(system.file(package="swirl"), "/MyCourse/GLM"))
-
-- Class: cmd_question
-  Output: First we load the data named "Data.RData" which is in the current working directory. Do you know the command for loading it? 
-  CorrectAnswer: load("Data.RData")
-  AnswerTests: omnitest(correctExpr='load("Data.RData")')
-  Hint: try load("Data.RData")
+  Output: First we load the data named "Data.RData". You should type load(paste0(system.file(package="swirl"),"/Courses/MyCourse/GLM/Data.RData")). 
+  CorrectAnswer: load(paste0(system.file(package="swirl"),"/Courses/MyCourse/GLM/Data.RData"))
+  AnswerTests: omnitest(correctExpr='load(paste0(system.file(package="swirl"),"/Courses/MyCourse/GLM/Data.RData"))')
+  Hint: try load(paste0(system.file(package="swirl"),"/Courses/MyCourse/GLM/Data.RData"))
 
 - Class: cmd_question
   Output: Do you know the command to look at the first 10 entries of our data "crab"? You will see what covariates we have in this data set. 
