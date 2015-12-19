@@ -201,5 +201,9 @@
   Output: Using the same technique, we can further refine our model, which will be your exercises.
 
 - Class: text
+  Output: By plotting the histogram of the response variable, we recognized that there might be more than expected zero count in our data. To take this into consideration, we may fit a zero-inflated Poisson regression instead. On the other hand, negative binomial model is also a good choice for count data, where it doesn't have the problem of over-dispersion. It also has the corresponding zero-inflated negative binomial model to deal with extra zero counts. Generally speaking, the difference between Poisson model and negative binomial model is that negative binomial model allows for more extreme values, i.e. a heavier tail of the data. We will have more materials on this later.  
+  
+- Class: text
   Output: Hope you have learned something from this class. See you next time!
+
 
