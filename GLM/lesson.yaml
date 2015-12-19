@@ -20,10 +20,10 @@
   Hint: It's Normal. 
 
 - Class: text
-  Output: The Generalized Linear Model (GLM) is a flexible generalization of ordinary linear regression that allows for response variables that have error distribution models other than a normal distribution. The GLM generalizes linear regression by allowing the linear model to be related to the response variable via a link function and by allowing the magnitude of the variance of each measurement to be a function of its predicted value.
+  Output: The Generalized Linear Model (GLM) is a flexible generalization of ordinary linear regression that allows for response variables to have error distribution models other than a normal distribution. The GLM generalizes linear regression by allowing the linear model to be related to the response variable via a link function and by allowing the magnitude of the variance of each measurement to be a function of its predicted value.
 
 - Class: text
-  Output: Now, we will only focus on a special case of GLM, Poisson Regression.
+  Output: In this section, we will only focus on a special case of GLM, Poisson Regression.
 
 - Class: mult_question
   Output: What can be the response variables in Poisson Regression?
@@ -42,7 +42,7 @@
   Output: If explanatory variables, X = (X1, X2, … Xk), are continuous or a combination of continuous and categorical variables, convention is to call such a model “Poisson Regression”.
 
 - Class: text
-  Output: If explanatory variables, X = (X1, X2, … Xk), are ALL categorical, then the counts to be modeled are the counts in a contingency table, and the convention is to call such a model log-linear model.
+  Output: If they are ALL categorical, then the counts to be modeled are the counts in a contingency table, and the convention is to call such a model log-linear model.
 
 - Class: text
   Output: If Y/t is the variable of interest then even with all categorical predictors, the regression model will be known as Poisson regression, not a log-linear model.
@@ -99,6 +99,15 @@
   Hint: try crab$S = as.factor(crab$S)
 
 - Class: cmd_question
+  Output: First, we would like to have a histogram of our response variable "Sa". It is helpful to set the breaks equal to 20. 
+  CorrectAnswer: hist(crab$Sa, breaks = 20)
+  AnswerTests: omnitest(correctExpr='hist(crab$Sa, breaks = 20)')
+  Hint: try hist(crab$Sa, breaks = 20)
+
+- Class: text
+  Output: This histogram is a Poisson-like figure, although there are more 0 counts than expected as in a perfect Poisson distribution. In the following discussion, we will use Poisson model for this data set. 
+
+- Class: cmd_question
   Output: Let's first see the help page of glm(). Do you know how to do that? 
   CorrectAnswer: ?glm
   AnswerTests: omnitest(correctExpr='?glm')
@@ -123,7 +132,7 @@
   Hint: try summary(fit1)
 
 - Class: text
-  Output: The summary first gives a general description of deviance residuals, with a minimum of -3.0291, a maximum of 4.9449. It also provides the estimate with standard error and corresponding p value for each covariate. The last part is the deviance and degrees of freedom of the model, letting us to check whether the model is a good fit. 
+  Output: (You may want to expand the Console window so that you can see this paragraph and the summary simutaneously) The summary first gives a general description of deviance residuals, with a minimum of -3.0291, a maximum of 4.9449. It also provides the estimate with standard error and corresponding p value for each covariate. The last part is the deviance and degrees of freedom of the model, letting us to check whether the model is a good fit. 
 
 - Class: text
   Output: Knowing that the residual deviance follows a chi-squared distribution, we can perform the test to see whether the model is a good fit. 
@@ -153,16 +162,25 @@
   Hint: try summary(fit2)
   
 - Class: text
-  Output: The summary shows that all the coefficients are not significant at 0.05 level. We may want to change our model by dropping some covariates. A typical method is to first drop the covariate with largest p-value, which is crab$W in our case. 
+  Output: The summary shows that all the coefficients are not significant at 0.05 level. We may want to change our model by dropping some covariates. To do this, we need more information.  
+ 
+- Class: cmd_question
+  Output: One way is a goodness-of-fit test by using anova. Note that we are using quasipoisson family, we should choose F-test in this scenario.
+  CorrectAnswer: anova(fit2, test = "F")
+  AnswerTests: omnitest(correctExpr='anova(fit2, test = "F")')
+  Hint: try anova(fit2, test = "F")
+
+- Class: text
+  Output: Looking at the anova result, we may want to drop the last variable we added "Wt" first. 
   
 - Class: cmd_question
-  Output: Now, we want to fit a new model without carapace width (W), named fit3. 
-  CorrectAnswer: fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)
-  AnswerTests: omnitest(correctExpr='fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)')
-  Hint: try fit3 = glm(crab$Sa~crab$C+crab$S+crab$Wt, family = quasipoisson(), data=crab)
+  Output: Now, we want to fit a new model without Weight (Wt), named fit3. 
+  CorrectAnswer: fit3 = glm(crab$Sa~crab$C+crab$S+crab$W, family = quasipoisson(), data=crab)
+  AnswerTests: omnitest(correctExpr='fit3 = glm(crab$Sa~crab$C+crab$S+crab$W, family = quasipoisson(), data=crab)')
+  Hint: try fit3 = glm(crab$Sa~crab$C+crab$S+crab$W, family = quasipoisson(), data=crab)
   
 - Class: cmd_question
-  Output: Check the p-values for each covariate in the new model
+  Output: See the summary of the new model
   CorrectAnswer: summary(fit3)
   AnswerTests: omnitest(correctExpr='summary(fit3)')
   Hint: try summary(fit3)
@@ -177,10 +195,11 @@
   Hint: try anova(fit3, fit2, test = "F")
 
 - Class: text
-  Output: The p value from F-test is 0.8516, implying that carapace width (W) is not a main factor for the number of satellites (Sa). 
+  Output: The p value from F-test is 0.09603, which is exactly the value we got just now. We cannot reject the NULL hypothesis that the coefficient of Weight in this setting is zero. 
   
 - Class: text
   Output: Using the same technique, we can further refine our model, which will be your exercises.
 
 - Class: text
   Output: Hope you have learned something from this class. See you next time!
+

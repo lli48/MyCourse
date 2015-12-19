@@ -6,10 +6,30 @@ output: html_document
 ---
 Now, we will introduce more on the theoretical side of Poisson Regression. 
 
+Recall that a discrete random variable $X$ is said to have a Poisson distribution with parameter $\lambda$ > 0, if, for k = 0, 1, 2, ..., the probability mass function of $X$ is given by 
+$$f(k;\lambda )=\Pr(X=k)={\frac {\lambda ^{k}e^{-\lambda }}{k!}}$$
+
+with $E(X) = Var(X) = \lambda$. 
+
+Here is a plot of the probability mass function of Poisson distribution with different value of $\lambda$. 
+
+```{r, echo = FALSE}
+library(ggplot2)
+a1 = cbind(c(0:10), dpois(0:10, lambda=1), rep(1,11))
+a2 = cbind(c(0:10), dpois(0:10, lambda=4), rep(4,11))
+a3 = cbind(c(0:10), dpois(0:10, lambda=10), rep(10,11))
+a = rbind(a1,a2,a3)
+a = data.frame(a)
+a$X3 = as.factor(a$X3)
+p = ggplot(a) + geom_line(aes(X1,X2, group = X3, color = X3))  
+p + scale_colour_discrete(name="lambda") + xlab("k") + ylab("P(X=k)") + labs(title = "Poisson PMF") 
+```
+
+
 ### Three components of GLM
 - A probability distribution
 - A linear predictor $\eta = X\beta$
-- A link function g such that E(Y) = $\mu$ = $g^{-1}(\eta)$
+- A link function $g$ such that $E(Y) = \mu = g^{-1}(\eta)$
 
 In Poisson regression, we usually choose the link function to be $\log$. 
 
@@ -17,7 +37,7 @@ In Poisson regression, we usually choose the link function to be $\log$.
 Assume that 
 $$ g(\mu)=\beta_0+\beta_1X_1+\beta_2X_2+…+\beta_kX_k=X^T_i\beta $$
 
-Here, the response Y has a Poisson distribution that is $y_i$ ~ $Poisson(\mu_i)$ for $i=1,...,N$ where the expected count of $y_i$ is E(Y)=$\mu$.
+Here, the response $Y$ has a Poisson distribution that is $y_i$ ~ $Poisson(\mu_i)$ for $i=1,...,N$ where the expected count of $y_i$ is $E(Y)=\mu$.
 
 For simplicity, with a single explanatory variable and log link function, we write: $\log(\mu)=\alpha+\beta X.$ This is equivalent to: $\mu=\exp(\alpha+\beta X)=\exp(\alpha)\exp(\beta X)$. 
 
@@ -25,13 +45,13 @@ For simplicity, with a single explanatory variable and log link function, we wri
 Assume that 
 $$ g(\mu)=\beta_0+\beta_1X_1+\beta_2X_2+…+\beta_kX_k=X^T_i\beta $$
 
-Here, the response Y has a Poisson distribution, and t is the index of the time or space; more specifically the expected value of rate Y/t, is $E(Y/t)=\mu$ that is $E(Y)=\mu t$. 
+Here, the response $Y$ has a Poisson distribution, and $t$ is the index of the time or space; more specifically the expected value of rate $Y/t$, is $E(Y/t)=\mu$ that is $E(Y)=\mu t$. 
 
 With the same log link function, we have $\log(\mu/t)=\alpha+\beta X$, which is equivalent to 
 $$ \log(\mu)−\log(t)=\alpha+\beta X $$
 $$ \log(\mu)=\alpha+\beta X+ \log(t)$$
 
-We call $\log(t)$ an offset term. It is an adjustment term and a group of observations may have the same offset, or each individual may have a different value of t. 
+We call $\log(t)$ an offset term. It is an adjustment term and a group of observations may have the same offset, or each individual may have a different value of $t$. 
 
 ### Parameter Estimation
 We can find the Maximum Likelihood Estimator(MLEs) for $\beta$ by maximizing the log-likelihood. In general, there are no closed-form solutions, so the ML estimates are obtained by using iterative algorithms such as Newton-Raphson (NR), Iteratively re-weighted least squares (IRWLS), etc.
@@ -47,7 +67,7 @@ $Y_i|\mu_i$ ~ Poisson($\mu_i$), $\eta_i = \log(\mu_i) = X^T_i \beta$
 The log-likelihood can be written as: 
 $l(\mu,y) = \sum_i(y_i\log(\mu_i)-\mu_i)+constant = \sum_i (y_i X^T_i \beta - \exp(X^T_i \beta))+c$
 
-By calculating the first and second derivative of l with respect to $\beta$, we can derive the formula for N-R method: ($W = diag(\mu_i)$)
+By calculating the first and second derivative of $l(\mu,y)$ with respect to $\beta$, we can derive the formula for N-R method: ($W = diag(\mu_i)$)
 
 $\beta_{i+1} = \beta_i + (X^TWX)^{-1}X^T(y-\mu)$
 
@@ -64,5 +84,5 @@ $\beta_{i+1} = \beta_i + (X^TWX)^{-1}X^T(y-\mu)$
 - We can either adjust for overdispersion or use negative binomial regression instead
 
 ### GLM in R
-In R, we can use the function glm() to fit the model. 
+In R, we can use the function glm() to fit the model, and many options are available to refine the model. 
 
